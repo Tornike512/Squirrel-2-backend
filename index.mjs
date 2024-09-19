@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import mongoose from "mongoose";
 import sendIpPost from "./Routes/IpAddress.mjs";
-import getIpAddress from "./Routes/GetIpAddress.mjs";
+import getIpAddress from "./Routes/getIpAddress.mjs";
 
 const PORT = process.env.PORT || 4500;
 
