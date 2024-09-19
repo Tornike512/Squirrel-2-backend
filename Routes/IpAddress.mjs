@@ -1,5 +1,6 @@
 import express from "express";
 import requestIp from "request-ip";
+import statement from "../Models/Statement.mjs";
 
 const sendIpPost = express.Router();
 
@@ -10,7 +11,10 @@ sendIpPost.post("/api/update", async (req, res) => {
   const ipAddress = req.clientIp;
 
   try {
-    res.status(201).json({ ipAddress });
+    const newIpAddress = new statement({ ipAddress });
+    await newIpAddress.save();
+
+    res.status(201).send({ ipAddress });
   } catch (error) {
     res
       .status(404)

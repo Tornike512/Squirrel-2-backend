@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import mongoose from "mongoose";
 import sendIpPost from "./Routes/IpAddress.mjs";
+import getIpAddress from "./Routes/GetIpAddress.mjs";
 
 const PORT = process.env.PORT || 4500;
 
@@ -22,6 +23,8 @@ mongoose
   });
 
 app.use(sendIpPost);
+
+app.use(getIpAddress);
 
 app.listen(PORT, () => {
   console.log("the server is running");
