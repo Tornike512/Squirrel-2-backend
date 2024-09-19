@@ -1,21 +1,28 @@
 import express from "express";
-import dotenv from "dotenv/config";
+import dotenv from "dotenv";
 import cors from "cors";
 import mongoose from "mongoose";
+import sendIpPost from "./Routes/IpAddress.mjs";
+
+const PORT = process.env.PORT || 4500;
+
+dotenv.config();
 
 const app = express();
 app.use(cors());
+app.use(express.json());
 
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
     console.log("Connected to database");
-    server.listen(3001, () => {
-      console.log("the server is running");
-    });
   })
   .catch(() => {
     console.log("Connection Failed");
   });
 
-// Set Up Socket.io
+app.use(sendIpPost);
+
+app.listen(PORT, () => {
+  console.log("the server is running");
+});
