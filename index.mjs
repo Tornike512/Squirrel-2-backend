@@ -27,12 +27,22 @@ mongoose
 
 // app.use(getIpAddress);
 
+let vote = 0;
+
 const io = new Server({
-  cors: { origin: `http://localhost:${PORT}` },
+  cors: { origin: `http://localhost:5173` },
 });
 
 io.on("connection", (socket) => {
-  console.log("someone has connected");
+  io.emit("sendVote", vote);
+
+  socket.on("updateVote", () => {
+    vote++;
+
+    console.log(vote);
+
+    io.emit("sendVote", vote);
+  });
 
   socket.on("disconnect", () => {
     console.log("someone has left");
