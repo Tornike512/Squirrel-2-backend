@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 // import sendIpPost from "./Routes/IpAddress.mjs";
 // import getIpAddress from "./Routes/getIpAddress.mjs";
 import { Server } from "socket.io";
+import votesModel from "./Models/VotesModel.mjs";
 
 const PORT = process.env.PORT || 4500;
 
@@ -36,12 +37,16 @@ const io = new Server({
 io.on("connection", (socket) => {
   io.emit("sendVote", vote);
 
-  socket.on("updateVote", () => {
+  socket.on("updateVote", async () => {
     vote++;
 
-    console.log(vote);
-
-    io.emit("sendVote", vote);
+    try {
+      const newVote = new votesModel({ vote });
+      await newVote.save();
+      io.emit("sendVote", vote);
+    } catch (error) {
+      console.log("Error Updating Votes", error);
+    }
   });
 
   socket.on("disconnect", () => {
