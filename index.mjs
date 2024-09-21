@@ -2,8 +2,9 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import mongoose from "mongoose";
-import sendIpPost from "./Routes/IpAddress.mjs";
-import getIpAddress from "./Routes/getIpAddress.mjs";
+// import sendIpPost from "./Routes/IpAddress.mjs";
+// import getIpAddress from "./Routes/getIpAddress.mjs";
+import { Server } from "socket.io";
 
 const PORT = process.env.PORT || 4500;
 
@@ -22,10 +23,24 @@ mongoose
     console.log("Connection Failed");
   });
 
-app.use(sendIpPost);
+// app.use(sendIpPost);
 
-app.use(getIpAddress);
+// app.use(getIpAddress);
 
-app.listen(PORT, () => {
-  console.log("the server is running");
+const io = new Server({
+  cors: { origin: `http://localhost:${PORT}` },
 });
+
+io.on("connection", (socket) => {
+  console.log("someone has connected");
+
+  socket.on("disconnect", () => {
+    console.log("someone has left");
+  });
+});
+
+io.listen(PORT);
+
+// app.listen(PORT, () => {
+//   console.log("the server is running");
+// });
