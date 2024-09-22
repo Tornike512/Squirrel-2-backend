@@ -2,9 +2,10 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import mongoose from "mongoose";
-// import sendIpPost from "./Routes/IpAddress.mjs";
-// import getIpAddress from "./Routes/getIpAddress.mjs";
+import sendIpPost from "./Routes/IpAddress.mjs";
+import getIpAddress from "./Routes/getIpAddress.mjs";
 import { Server } from "socket.io";
+import { createServer } from "http";
 import votesModel from "./Models/VotesModel.mjs";
 
 const PORT = process.env.PORT || 4500;
@@ -12,7 +13,11 @@ const PORT = process.env.PORT || 4500;
 dotenv.config();
 
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+  })
+);
 app.use(express.json());
 
 mongoose
@@ -24,22 +29,23 @@ mongoose
     console.log("Connection Failed");
   });
 
-// app.use(sendIpPost);
+app.use(sendIpPost);
+app.use(getIpAddress);
 
-// app.use(getIpAddress);
+const server = createServer(app);
 
-let vote = 0;
-
-const io = new Server({
+const io = new Server(server, {
   cors: { origin: `http://localhost:5173` },
 });
 
-io.on("connection", (socket) => {
-  io.emit("sendVote", vote);
+let vote = 0;
+
+io.on("connection", async (socket) => {
+  const latestVote = await votesModel.findOne().sort({ timestamp: -1 });
+
+  io.emit("sendVote", latestVote.votes);
 
   socket.on("updateVote", async () => {
-    const latestVote = await votesModel.findOne().sort({ timestamp: -1 });
-
     if (latestVote) {
       latestVote.votes++;
 
@@ -59,8 +65,6 @@ io.on("connection", (socket) => {
   });
 });
 
-io.listen(PORT);
-
-// app.listen(PORT, () => {
-//   console.log("the server is running");
-// });
+server.listen(PORT, () => {
+  console.log("the server is running");
+});
