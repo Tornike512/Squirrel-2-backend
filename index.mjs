@@ -38,14 +38,19 @@ io.on("connection", (socket) => {
   io.emit("sendVote", vote);
 
   socket.on("updateVote", async () => {
-    vote++;
+    const latestVote = await votesModel.findOne().sort({ timestamp: -1 });
 
-    try {
-      const newVote = new votesModel({ vote });
+    if (latestVote) {
+      latestVote.votes++;
+
+      await latestVote.save();
+
+      io.emit("sendVote", latestVote.votes);
+    } else {
+      const newVote = new votesModel({ votes: vote });
       await newVote.save();
-      io.emit("sendVote", vote);
-    } catch (error) {
-      console.log("Error Updating Votes", error);
+
+      io.emit("sendVote", newVote.votes);
     }
   });
 
