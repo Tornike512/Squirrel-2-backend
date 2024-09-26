@@ -10,21 +10,15 @@ sendIpPost.use(requestIp.mw());
 sendIpPost.post("/api/update", async (req, res) => {
   const ipAddress = req.clientIp;
 
-  const ipArray = await statement.find({}, { ipAddress: 1, _id: 0 });
+  try {
+    const newIpAddress = new statement({ ipAddress });
+    await newIpAddress.save();
 
-  if (ipArray.includes(ipAddress)) {
-    try {
-      const newIpAddress = new statement({ ipAddress });
-      await newIpAddress.save();
-
-      res.status(201).send({ ipAddress });
-    } catch (error) {
-      res
-        .status(404)
-        .json({ message: "Error Sending Post Request For Ip Address" });
-    }
-  } else {
-    return;
+    res.status(201).send({ ipAddress });
+  } catch (error) {
+    res
+      .status(404)
+      .json({ message: "Error Sending Post Request For Ip Address" });
   }
 });
 

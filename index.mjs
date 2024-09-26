@@ -20,6 +20,8 @@ app.use(
 );
 app.use(express.json());
 
+const server = createServer(app);
+
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
@@ -29,14 +31,12 @@ mongoose
     console.log("Connection Failed");
   });
 
-app.use(sendIpPost);
-app.use(getIpAddress);
-
-const server = createServer(app);
-
 const io = new Server(server, {
   cors: { origin: `http://localhost:5173` },
 });
+
+app.use(sendIpPost);
+app.use(getIpAddress);
 
 let vote = 0;
 
