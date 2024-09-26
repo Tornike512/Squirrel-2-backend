@@ -6,6 +6,6 @@ const ColorSchema = new mongoose.Schema({
   timestamp: { type: Date, default: Date.now },
 });
 
-const Color = mongoose.model("color", ColorSchema);
+const color = mongoose.model("color", ColorSchema);
 
 export default color;
