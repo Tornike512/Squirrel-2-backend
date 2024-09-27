@@ -7,7 +7,8 @@ import getIpAddress from "./Routes/getIpAddress.mjs";
 import { Server } from "socket.io";
 import { createServer } from "http";
 import votesModel from "./Models/VotesModel.mjs";
-import color from "./Models/ColorModel.mjs";
+import green from "./Models/GreenModel.mjs";
+import red from "./Models/RedModel.mjs";
 
 const PORT = process.env.PORT || 4500;
 
@@ -40,12 +41,11 @@ app.use(sendIpPost);
 app.use(getIpAddress);
 
 let vote = 0;
-let red = 0;
-let green = 0;
 
 io.on("connection", async (socket) => {
   const latestVote = await votesModel.findOne().sort({ timestamp: -1 });
-  const latestColor = await color.findOne().sort({ timestamp: -1 });
+  const latestRed = await red.findOne().sort({ timestamp: -1 });
+  const latestGreen = await green.findOne().sort({ timestamp: -1 });
 
   socket.on("updateVote", async () => {
     if (latestVote) {
@@ -63,14 +63,14 @@ io.on("connection", async (socket) => {
   });
 
   socket.on("updateRed", async () => {
-    if (latestColor) {
-      latestColor.red++;
+    if (latestRed) {
+      latestRed.red++;
 
-      await latestColor.save();
+      await latestRed.save();
 
-      io.emit("sendRed", latestColor.red);
+      io.emit("sendRed", latestRed.red);
     } else {
-      const newRed = new color({ red: red });
+      const newRed = new red({ red: red });
 
       await newRed.save();
       io.emit("sendRed", newRed.red);
@@ -78,14 +78,14 @@ io.on("connection", async (socket) => {
   });
 
   socket.on("updateGreen", async () => {
-    if (latestColor) {
-      latestColor.green++;
+    if (latestGreen) {
+      latestGreen.green++;
 
       await latestColor.save();
 
-      io.emit("sendGreen", latestColor.green);
+      io.emit("sendGreen", latestGreen.green);
     } else {
-      const newGreen = new color({ green: green });
+      const newGreen = new green({ green: green });
 
       await newGreen.save();
       io.emit("sendGreen", newGreen.green);
