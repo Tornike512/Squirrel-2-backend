@@ -62,22 +62,32 @@ io.on("connection", async (socket) => {
     }
   });
 
-  socket.on("updateColor", async () => {
+  socket.on("updateRed", async () => {
     if (latestColor) {
       latestColor.red++;
-      latestColor.green++;
 
       await latestColor.save();
 
       io.emit("sendRed", latestColor.red);
-      io.emit("sendGreen", latestColor.green);
     } else {
       const newRed = new color({ red: red });
-      const newGreen = new color({ green: green });
 
       await newRed.save();
-      await newGreen.save();
       io.emit("sendRed", newRed.red);
+    }
+  });
+
+  socket.on("updateGreen", async () => {
+    if (latestColor) {
+      latestColor.green++;
+
+      await latestColor.save();
+
+      io.emit("sendGreen", latestColor.green);
+    } else {
+      const newGreen = new color({ green: green });
+
+      await newGreen.save();
       io.emit("sendGreen", newGreen.green);
     }
   });
