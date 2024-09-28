@@ -9,6 +9,7 @@ import { createServer } from "http";
 import votesModel from "./Models/VotesModel.mjs";
 import green from "./Models/GreenModel.mjs";
 import red from "./Models/RedModel.mjs";
+import { log } from "console";
 
 const PORT = process.env.PORT || 4500;
 
@@ -41,6 +42,8 @@ app.use(sendIpPost);
 app.use(getIpAddress);
 
 let vote = 0;
+let redCount = 1;
+let greenCount = 1;
 
 io.on("connection", async (socket) => {
   const latestVote = await votesModel.findOne().sort({ timestamp: -1 });
@@ -70,7 +73,7 @@ io.on("connection", async (socket) => {
 
       io.emit("sendRed", latestRed.red);
     } else {
-      const newRed = new red({ red: red });
+      const newRed = new red({ red: redCount });
 
       await newRed.save();
       io.emit("sendRed", newRed.red);
@@ -81,11 +84,11 @@ io.on("connection", async (socket) => {
     if (latestGreen) {
       latestGreen.green++;
 
-      await latestColor.save();
+      await latestGreen.save();
 
       io.emit("sendGreen", latestGreen.green);
     } else {
-      const newGreen = new green({ green: green });
+      const newGreen = new green({ green: greenCount });
 
       await newGreen.save();
       io.emit("sendGreen", newGreen.green);
@@ -93,6 +96,8 @@ io.on("connection", async (socket) => {
   });
 
   io.emit("sendVote", latestVote.votes);
+  io.emit("sendGreen", latestGreen.green);
+  io.emit("sendRed", latestRed.red);
 
   socket.on("disconnect", () => {
     console.log("someone has left");
