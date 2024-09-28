@@ -9,7 +9,6 @@ import { createServer } from "http";
 import votesModel from "./Models/VotesModel.mjs";
 import green from "./Models/GreenModel.mjs";
 import red from "./Models/RedModel.mjs";
-import { log } from "console";
 
 const PORT = process.env.PORT || 4500;
 
@@ -18,8 +17,7 @@ dotenv.config();
 const app = express();
 app.use(
   cors({
-    origin:
-      "https://66f82dd9a744c213a0936387--flourishing-lolly-0f3287.netlify.app",
+    origin: "*",
   })
 );
 app.use(express.json());
@@ -37,7 +35,7 @@ mongoose
 
 const io = new Server(server, {
   cors: {
-    origin: `https://66f82dd9a744c213a0936387--flourishing-lolly-0f3287.netlify.app`,
+    origin: `*`,
   },
 });
 
