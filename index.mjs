@@ -18,7 +18,8 @@ dotenv.config();
 const app = express();
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin:
+      "https://66f82dd9a744c213a0936387--flourishing-lolly-0f3287.netlify.app",
   })
 );
 app.use(express.json());
@@ -35,7 +36,9 @@ mongoose
   });
 
 const io = new Server(server, {
-  cors: { origin: `http://localhost:5173` },
+  cors: {
+    origin: `https://66f82dd9a744c213a0936387--flourishing-lolly-0f3287.netlify.app`,
+  },
 });
 
 app.use(sendIpPost);
