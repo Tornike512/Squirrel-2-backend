@@ -5,16 +5,14 @@ import votedipModel from "../Models/VotedIpsModel.mjs";
 const votedips = express.Router();
 
 votedips.use(express.json());
-votedips.use(requestIp.mw());
 
 votedips.post("/api/voted", async (req, res) => {
-  const votedIps = req.clientIp;
-
+  const votedIp = req.body;
   try {
-    const newVotedIps = new votedipModel({ votedIp: votedIps });
+    const newVotedIps = new votedipModel(votedIp);
     await newVotedIps.save();
 
-    res.status(201).send({ votedIps });
+    res.status(201).send({ votedIp });
   } catch (error) {
     res
       .status(404)
