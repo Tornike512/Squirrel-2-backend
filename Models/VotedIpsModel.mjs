@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const votedIpSchema = new mongoose.Schema({
-  votedIp: { type: String, required: true },
+  votedIp: { type: String, required: false },
   timestamp: { type: Date, default: Date.now },
 });
 

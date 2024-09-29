@@ -2,12 +2,12 @@ import express from "express";
 import requestIp from "request-ip";
 import votedipModel from "../Models/VotedIpsModel.mjs";
 
-const sendVotedIps = express.Router();
+const votedips = express.Router();
 
-sendVotedIps.use(express.json());
-sendVotedIps.use(requestIp.mw());
+votedips.use(express.json());
+votedips.use(requestIp.mw());
 
-sendVotedIps.post("/api/voted", async (req, res) => {
+votedips.post("/api/voted", async (req, res) => {
   const votedIps = req.clientIp;
 
   try {
@@ -22,4 +22,4 @@ sendVotedIps.post("/api/voted", async (req, res) => {
   }
 });
 
-export default sendVotedIps;
+export default votedips;

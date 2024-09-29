@@ -9,8 +9,8 @@ import { createServer } from "http";
 import votesModel from "./Models/VotesModel.mjs";
 import green from "./Models/GreenModel.mjs";
 import red from "./Models/RedModel.mjs";
-import sendVotedIps from "./Routes/votedIps.mjs";
 import getVotedIpAddress from "./Routes/getVotedIps.mjs";
+import votedips from "./Routes/votedIps.mjs";
 
 const PORT = process.env.PORT || 4500;
 
@@ -45,7 +45,7 @@ const io = new Server(server, {
 
 app.use(sendIpPost);
 app.use(getIpAddress);
-app.use(sendVotedIps);
+app.use(votedips);
 app.use(getVotedIpAddress);
 
 let vote = 0;
