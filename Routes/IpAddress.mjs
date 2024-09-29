@@ -15,7 +15,6 @@ sendIpPost.post("/api/update", async (req, res) => {
     const newIpAddress = new statement({ ipAddress, hasVoted });
 
     await newIpAddress.save();
-    await hasVoted.save();
 
     res.status(201).send({ ipAddress, hasVoted });
   } catch (error) {
