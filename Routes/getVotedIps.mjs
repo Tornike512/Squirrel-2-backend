@@ -8,7 +8,7 @@ getVotedIpAddress.use(express.json());
 getVotedIpAddress.get("/api/getVoted", async (req, res) => {
   try {
     const result = await votedipModel.find();
-    res.status(200).json(result);
+    res.json(result);
   } catch (error) {
     console.log("Error Sending get Votes Request", error);
   }
