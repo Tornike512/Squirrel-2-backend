@@ -11,7 +11,7 @@ votedips.post("/api/voted", async (req, res) => {
   const votedIps = req.clientIp;
 
   try {
-    const newVotedIps = new votedipModel({ votedIps });
+    const newVotedIps = new votedipModel({ votedIps: votedips });
     await newVotedIps.save();
 
     res.status(201).send({ votedIps });
