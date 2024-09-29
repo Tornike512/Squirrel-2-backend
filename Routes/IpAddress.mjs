@@ -9,12 +9,15 @@ sendIpPost.use(requestIp.mw());
 
 sendIpPost.post("/api/update", async (req, res) => {
   const ipAddress = req.clientIp;
+  const hasVoted = req.body.hasVoted;
 
   try {
-    const newIpAddress = new statement({ ipAddress });
-    await newIpAddress.save();
+    const newIpAddress = new statement({ ipAddress, hasVoted });
 
-    res.status(201).send({ ipAddress });
+    await newIpAddress.save();
+    await hasVoted.save();
+
+    res.status(201).send({ ipAddress, hasVoted });
   } catch (error) {
     res
       .status(404)

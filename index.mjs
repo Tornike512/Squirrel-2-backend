@@ -18,6 +18,7 @@ const app = express();
 app.use(
   cors({
     origin: "*",
+    credentials: true,
   })
 );
 app.use(express.json());
@@ -36,6 +37,7 @@ mongoose
 const io = new Server(server, {
   cors: {
     origin: `*`,
+    credentials: true,
   },
 });
 
