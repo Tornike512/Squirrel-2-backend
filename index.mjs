@@ -9,6 +9,7 @@ import { createServer } from "http";
 import votesModel from "./Models/VotesModel.mjs";
 import green from "./Models/GreenModel.mjs";
 import red from "./Models/RedModel.mjs";
+import votedipModel from "./Models/VotedIpsModel.mjs";
 
 const PORT = process.env.PORT || 4500;
 
