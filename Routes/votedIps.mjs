@@ -1,5 +1,4 @@
 import express from "express";
-import requestIp from "request-ip";
 import votedipModel from "../Models/VotedIpsModel.mjs";
 
 const votedips = express.Router();
@@ -12,7 +11,7 @@ votedips.post("/api/voted", async (req, res) => {
     const newVotedIps = new votedipModel(votedIp);
     await newVotedIps.save();
 
-    res.status(201).send({ votedIp });
+    res.status(201).send(votedIp);
   } catch (error) {
     res
       .status(404)
