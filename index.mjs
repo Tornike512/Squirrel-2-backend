@@ -58,6 +58,10 @@ io.on("connection", async (socket) => {
   const latestRed = await red.findOne().sort({ timestamp: -1 });
   const latestGreen = await green.findOne().sort({ timestamp: -1 });
 
+  io.emit("sendVote", latestVote ? latestVote.votes : 0);
+  io.emit("sendGreen", latestGreen ? latestGreen.green : 0);
+  io.emit("sendRed", latestRed ? latestRed.red : 0);
+
   socket.on("updateVote", async () => {
     if (latestVote) {
       latestVote.votes++;
@@ -102,10 +106,6 @@ io.on("connection", async (socket) => {
       io.emit("sendGreen", newGreen.green);
     }
   });
-
-  io.emit("sendVote", latestVote.votes);
-  io.emit("sendGreen", latestGreen.green);
-  io.emit("sendRed", latestRed.red);
 
   socket.on("disconnect", () => {
     console.log("someone has left");
