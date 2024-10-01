@@ -19,7 +19,8 @@ dotenv.config();
 const app = express();
 app.use(
   cors({
-    origin: "*",
+    origin:
+      "https://66fc1cc190696c70aaa368c1--rainbow-marzipan-315b5b.netlify.app",
     credentials: true,
   })
 );
@@ -38,7 +39,7 @@ mongoose
 
 const io = new Server(server, {
   cors: {
-    origin: `*`,
+    origin: `https://66fc1cc190696c70aaa368c1--rainbow-marzipan-315b5b.netlify.app`,
     credentials: true,
   },
 });
